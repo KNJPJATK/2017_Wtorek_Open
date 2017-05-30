@@ -1,6 +1,7 @@
 package eu.barcikowski.GUI;
 
 import com.sun.deploy.panel.JavaPanel;
+import eu.barcikowski.Utils.ItemValidator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +33,6 @@ public class MainFrame extends JFrame{
         this.add(leftPanel,BorderLayout.WEST);
         this.add(bottomPanel,BorderLayout.SOUTH);
         this.setSize(new Dimension(1337,500));
-
     }
 
     /**
@@ -92,7 +92,18 @@ public class MainFrame extends JFrame{
     private JButton createAddButton(JTextPane textPane, JTextArea... areas){
 
         JButton addButton = new JButton("ADD");
+
+
         addButton.addActionListener(e -> {
+
+            String[] values = new String[areas.length];
+            for (int i = 0; i < areas.length; i++) {
+                values[i] = areas[i].getText();
+            }
+            if(!ItemValidator.validate(values)){
+                JOptionPane.showMessageDialog(this,"The values you are trying to enter are incorrect!", "Error kurde ;(", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             StringBuilder sb = new StringBuilder();
             for (JTextArea area :
@@ -103,7 +114,7 @@ public class MainFrame extends JFrame{
             sb.deleteCharAt(sb.length()-1);
             sb.append("\n");
 
-            textPane.setText(sb.toString());
+            textPane.setText(textPane.getText() + sb.toString());
 
             for (JTextArea area :
                     areas) {
